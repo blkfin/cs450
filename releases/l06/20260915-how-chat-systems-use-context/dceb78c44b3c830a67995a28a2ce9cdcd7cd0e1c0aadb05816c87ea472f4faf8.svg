@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="960" viewBox="0 0 1600 960" role="img" aria-labelledby="title desc">
+  <title id="title">Notional machine for how an LLM produces text: human view, tokens, and LLM view</title>
+  <desc id="desc">Human text is converted by a tokenizer with a fixed vocabulary into tokens. The prompt and generated tokens so far form the context window, which has a fixed maximum size. Each token becomes an embedding, a list of numbers, processed by an LLM using a fixed arithmetic recipe and learned parameters that remain fixed after training. The LLM scores possible next tokens and picks a likely one. If it is not the special end token, it is appended directly to the prompt and generated tokens and the LLM calculates again. If it is the end token, generation stops. A detokenizer turns only the generated response tokens into visible text: without streaming, the whole response at once after the stop; with streaming, each new chunk as soon as it is appended. The detokenized text never goes back into the model.</desc>
+  <defs>
+    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto">
+      <path d="M0,0 L18,9 L0,18 Z" fill="#334155"/>
+    </marker>
+    <marker id="arrow-stream" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto">
+      <path d="M0,0 L18,9 L0,18 Z" fill="#0e7490"/>
+    </marker>
+    <style>
+      .title { font: 700 43px system-ui, sans-serif; fill: #0f172a; }
+      .lane { font: 700 22px system-ui, sans-serif; letter-spacing: 1.5px; }
+      .heading { font: 700 24px system-ui, sans-serif; fill: #0f172a; }
+      .heading-sm { font: 700 21px system-ui, sans-serif; fill: #0f172a; }
+      .body { font: 500 20px system-ui, sans-serif; fill: #334155; }
+      .small { font: 500 17px system-ui, sans-serif; fill: #475569; }
+      .label { font: 700 18px system-ui, sans-serif; fill: #1e3a5f; }
+      .stream-label { font: 700 18px system-ui, sans-serif; fill: #0e7490; }
+      .stream-small { font: 500 17px system-ui, sans-serif; fill: #0e7490; }
+      .mono { font: 600 18px ui-monospace, monospace; fill: #7f1d1d; }
+      .arrow { stroke: #334155; stroke-width: 4; fill: none; marker-end: url(#arrow); }
+      .stream { stroke: #0e7490; stroke-width: 4; stroke-dasharray: 12 8; fill: none; marker-end: url(#arrow-stream); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="960" rx="28" fill="#ffffff"/>
+  <rect x="0" y="95" width="380" height="865" fill="#eff6ff"/>
+  <rect x="380" y="95" width="340" height="865" fill="#fffbeb"/>
+  <rect x="720" y="95" width="880" height="865" fill="#faf5ff"/>
+  <line x1="380" y1="95" x2="380" y2="960" stroke="#93c5fd" stroke-width="3"/>
+  <line x1="720" y1="95" x2="720" y2="960" stroke="#d8b4fe" stroke-width="3"/>
+
+  <text x="800" y="62" text-anchor="middle" class="title">How an LLM produces text</text>
+  <text x="190" y="130" text-anchor="middle" class="lane" fill="#1d4ed8">HUMAN VIEW</text>
+  <text x="550" y="130" text-anchor="middle" class="lane" fill="#a16207">TOKENS: THE BRIDGE</text>
+  <text x="1160" y="130" text-anchor="middle" class="lane" fill="#7e22ce">LLM VIEW</text>
+
+  <!-- Top row: text in, through to the calculation -->
+  <rect x="40" y="185" width="260" height="135" rx="22" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+  <text x="170" y="232" text-anchor="middle" class="heading">Human text</text>
+  <text x="170" y="277" text-anchor="middle" class="body">“The cat sat”</text>
+
+  <path d="M304 252 H388" class="arrow"/>
+
+  <rect x="390" y="177" width="180" height="150" rx="18" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="480" y="218" text-anchor="middle" class="label">Tokenizer</text>
+  <text x="480" y="247" text-anchor="middle" class="small">text → tokens</text>
+  <text x="480" y="276" text-anchor="middle" class="small">fixed vocabulary</text>
+  <text x="480" y="303" text-anchor="middle" class="small">≈200K chunks here</text>
+
+  <path d="M574 252 H590" class="arrow"/>
+
+  <rect x="600" y="175" width="280" height="155" rx="22" fill="#fef9c3" stroke="#ca8a04" stroke-width="4"/>
+  <text x="740" y="210" text-anchor="middle" class="heading-sm">Prompt + generated</text>
+  <text x="740" y="237" text-anchor="middle" class="heading-sm">tokens so far</text>
+  <text x="740" y="278" text-anchor="middle" class="body">The · cat · sat</text>
+  <text x="740" y="301" text-anchor="middle" class="small">context window</text>
+  <text x="740" y="323" text-anchor="middle" class="small">fixed maximum size</text>
+
+  <path d="M885 252 H935" class="arrow"/>
+
+  <rect x="945" y="185" width="265" height="135" rx="22" fill="#ecfeff" stroke="#0891b2" stroke-width="4"/>
+  <text x="1077" y="230" text-anchor="middle" class="heading">Embeddings</text>
+  <text x="1077" y="268" text-anchor="middle" class="small">each token becomes</text>
+  <text x="1077" y="295" text-anchor="middle" class="small">a list of numbers</text>
+
+  <path d="M1215 252 H1260" class="arrow"/>
+
+  <rect x="1270" y="155" width="275" height="300" rx="24" fill="#f3e8ff" stroke="#7c3aed" stroke-width="5"/>
+  <text x="1407" y="200" text-anchor="middle" class="heading">LLM calculation</text>
+
+  <rect x="1290" y="222" width="235" height="110" rx="16" fill="#ede9fe" stroke="#8b5cf6" stroke-width="3"/>
+  <text x="1407" y="256" text-anchor="middle" class="label">Arithmetic recipe</text>
+  <text x="1407" y="285" text-anchor="middle" class="small">updates each token</text>
+  <text x="1407" y="310" text-anchor="middle" class="small">using the tokens before it</text>
+
+  <text x="1407" y="363" text-anchor="middle" class="heading">+</text>
+
+  <rect x="1290" y="375" width="235" height="66" rx="14" fill="#fae8ff" stroke="#a21caf" stroke-width="3"/>
+  <text x="1407" y="402" text-anchor="middle" class="label">Learned parameters</text>
+  <text x="1407" y="427" text-anchor="middle" class="small">fixed after training</text>
+
+  <path d="M1407 460 V500" class="arrow"/>
+
+  <rect x="1270" y="510" width="275" height="125" rx="22" fill="#dcfce7" stroke="#16a34a" stroke-width="4"/>
+  <text x="1407" y="548" text-anchor="middle" class="heading">Likely next token</text>
+  <text x="1407" y="578" text-anchor="middle" class="body">“ on”</text>
+  <text x="1407" y="603" text-anchor="middle" class="small">all ≈200K tokens are scored;</text>
+  <text x="1407" y="624" text-anchor="middle" class="small">one likely token is picked</text>
+
+  <!-- End-token check -->
+  <path d="M1407 639 V652" class="arrow"/>
+  <polygon points="1407,662 1542,722 1407,782 1272,722" fill="#ffffff" stroke="#334155" stroke-width="4"/>
+  <text x="1407" y="717" text-anchor="middle" class="label">Is it the</text>
+  <text x="1407" y="741" text-anchor="middle" class="label">end token?</text>
+
+  <!-- No: append and loop -->
+  <path d="M1268 722 H800 V340" class="arrow"/>
+  <text x="1245" y="708" text-anchor="end" class="label">No</text>
+  <text x="1030" y="672" text-anchor="middle" class="label">Append the token directly</text>
+  <text x="1030" y="700" text-anchor="middle" class="small">The · cat · sat · on → calculate again</text>
+
+  <!-- Streaming (optional): each appended token is also sent out for display right away -->
+  <circle cx="900" cy="722" r="7" fill="#0e7490"/>
+  <path d="M900 729 V836 H606" class="stream"/>
+  <text x="918" y="776" class="stream-label">With streaming:</text>
+  <text x="918" y="800" class="stream-small">each new chunk is shown right away</text>
+
+  <!-- Yes: stop, then detokenize the generated response -->
+  <path d="M1407 786 V812" class="arrow"/>
+  <text x="1425" y="806" class="label">Yes</text>
+  <rect x="1270" y="822" width="275" height="105" rx="22" fill="#fee2e2" stroke="#dc2626" stroke-width="4"/>
+  <text x="1407" y="860" text-anchor="middle" class="heading">Stop</text>
+  <text x="1407" y="892" text-anchor="middle" class="mono">&lt;|endoftext|&gt;</text>
+  <text x="1407" y="918" text-anchor="middle" class="small">end token is not displayed</text>
+
+  <path d="M1266 880 H606" class="arrow"/>
+  <text x="940" y="908" text-anchor="middle" class="label">Without streaming:</text>
+  <text x="940" y="932" text-anchor="middle" class="small">whole response at once, after the stop</text>
+
+  <rect x="420" y="800" width="180" height="125" rx="18" fill="#fef3c7" stroke="#d97706" stroke-width="3"/>
+  <text x="510" y="852" text-anchor="middle" class="label">Detokenizer</text>
+  <text x="510" y="883" text-anchor="middle" class="small">tokens → text</text>
+
+  <path d="M416 862 H308" class="arrow"/>
+
+  <rect x="40" y="795" width="260" height="135" rx="22" fill="#dbeafe" stroke="#2563eb" stroke-width="4"/>
+  <text x="170" y="840" text-anchor="middle" class="heading">Visible response</text>
+  <text x="170" y="880" text-anchor="middle" class="body">“on the mat.”</text>
+  <text x="170" y="912" text-anchor="middle" class="small">response tokens only</text>
+</svg>

@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="720" viewBox="0 100 1600 720" role="img" aria-labelledby="title desc">
+  <title id="title">EXP-002 Level 1 notional machine: a chat system contains an unchanged LLM and keeps the conversation</title>
+  <desc id="desc">Sam exchanges a message and reply through a chat interface positioned on the chat-system boundary. Inside the system, conversation history supplies messages to the unchanged LLM. The LLM reply returns to the interface and is saved into conversation history. The learned parameters do not change.</desc>
+  <defs>
+    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0 0 L18 9 L0 18 Z" fill="#334155"/></marker>
+    <marker id="arrow-teal" markerUnits="userSpaceOnUse" markerWidth="18" markerHeight="18" refX="16" refY="9" orient="auto"><path d="M0 0 L18 9 L0 18 Z" fill="#0f766e"/></marker>
+    <style>
+      text{font-family:Inter,system-ui,sans-serif;fill:#0f172a}.title{font-size:42px;font-weight:750}.subtitle{font-size:23px;font-weight:600;fill:#475569}.system-label{font-size:25px;font-weight:800;letter-spacing:1.5px;fill:#0f766e}.heading{font-size:31px;font-weight:750}.body{font-size:22px;font-weight:550}.small{font-size:19px;font-weight:500;fill:#475569}.emphasis{font-size:22px;font-weight:750;fill:#7e22ce}.arrow{stroke:#334155;stroke-width:5;fill:none;marker-end:url(#arrow)}.loop{stroke:#0f766e;stroke-width:5;fill:none;marker-end:url(#arrow-teal)}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#fff"/>
+  <rect x="105" y="185" width="1390" height="620" rx="34" fill="#ecfeff" stroke="#0f766e" stroke-width="6"/>
+  <text x="145" y="235" class="system-label">CHAT SYSTEM</text>
+  <text x="1450" y="235" text-anchor="end" class="small">harness software + LLM</text>
+  <rect x="610" y="135" width="380" height="130" rx="24" fill="#dbeafe" stroke="#2563eb" stroke-width="5"/>
+  <text x="800" y="185" text-anchor="middle" class="heading">CHAT INTERFACE</text>
+  <text x="800" y="222" text-anchor="middle" class="small">what Sam sees</text>
+  <text x="800" y="125" text-anchor="middle" class="heading">Sam</text>
+  <path d="M735 130 V147" class="arrow"/><text x="690" y="128" text-anchor="end" class="small">message</text>
+  <path d="M865 147 V130" class="arrow"/><text x="910" y="128" class="small">reply</text>
+  <rect x="245" y="350" width="455" height="245" rx="28" fill="#f8fafc" stroke="#64748b" stroke-width="4"/>
+  <text x="472" y="407" text-anchor="middle" class="heading">Conversation history</text>
+  <text x="472" y="451" text-anchor="middle" class="body">Sam: Hi, I have a quiz on cells.</text>
+  <text x="472" y="488" text-anchor="middle" class="body">Coach: What part feels unclear?</text>
+  <text x="472" y="525" text-anchor="middle" class="body">Sam: Help me start studying.</text>
+  <text x="472" y="565" text-anchor="middle" class="small">stored outside the LLM</text>
+  <rect x="925" y="325" width="410" height="300" rx="30" fill="#f3e8ff" stroke="#7c3aed" stroke-width="6"/>
+  <text x="1130" y="405" text-anchor="middle" class="heading">LLM</text>
+  <text x="1130" y="450" text-anchor="middle" class="body">messages in → reply out</text>
+  <rect x="1010" y="490" width="240" height="72" rx="16" fill="#ede9fe" stroke="#8b5cf6" stroke-width="3"/>
+  <text x="1130" y="521" text-anchor="middle" class="emphasis">UNCHANGED</text>
+  <text x="1130" y="549" text-anchor="middle" class="small">parameters stay fixed</text>
+  <path d="M800 267 V315 H472 V340" class="arrow"/><text x="625" y="303" text-anchor="middle" class="small">store Sam's message</text>
+  <path d="M710 472 H912" class="arrow"/><text x="811" y="450" text-anchor="middle" class="small">messages for this reply</text>
+  <path d="M1130 313 V278 H875 V267" class="arrow"/><text x="1015" y="300" text-anchor="middle" class="small">display reply</text>
+  <path d="M1130 637 V710 H472 V607" class="loop"/><text x="801" y="697" text-anchor="middle" class="body">save reply into the conversation</text>
+</svg>

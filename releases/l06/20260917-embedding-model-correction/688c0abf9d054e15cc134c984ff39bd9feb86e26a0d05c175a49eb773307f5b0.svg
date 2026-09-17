@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="690" viewBox="0 0 1600 690" role="img" aria-labelledby="t d">
+<title id="t">Context as one ordered array</title>
+<desc id="d">One long rectangle divided into six cells, left to right: the system prompt, four earlier conversation turns, and Sam&#39;s newest message. Together they are the context for the LLM&#39;s next reply.</desc>
+<style>text{font-family:Inter,system-ui,sans-serif;fill:#0f172a}.lab{font-size:30px;font-weight:800;letter-spacing:2px;fill:#0f766e}.idx{font-size:20px;fill:#64748b;font-family:ui-monospace,monospace}.role{font-size:18px;font-weight:800;letter-spacing:1px}.msg{font-size:22px}.grp{font-size:26px;font-weight:750}.note{font-size:22px;fill:#475569}</style>
+<rect width="1600" height="690" fill="#fff"/>
+<text x="800.0" y="75" text-anchor="middle" class="lab">CONTEXT FOR THE NEXT REPLY</text>
+<path d="M60 125 V100 H1540 V125" fill="none" stroke="#0f766e" stroke-width="4"/>
+<rect x="60" y="185" width="270" height="285" fill="#f1f5f9"/>
+<text x="195.0" y="162" text-anchor="middle" class="idx">[0]</text>
+<text x="78" y="227" class="role" style="fill:#475569">SYSTEM</text>
+<text x="78" y="295" class="msg">Instructions from</text>
+<text x="78" y="331" class="msg">the chat system</text>
+<text x="78" y="367" class="msg"></text>
+<text x="78" y="403" class="note">(hidden from Sam)</text>
+<rect x="330" y="185" width="242" height="285" fill="#dbeafe"/>
+<text x="451.0" y="162" text-anchor="middle" class="idx">[1]</text>
+<text x="348" y="227" class="role" style="fill:#1d4ed8">USER · Sam</text>
+<text x="348" y="295" class="msg">Hi, I&#39;m Sam.</text>
+<text x="348" y="331" class="msg">I have a biology</text>
+<text x="348" y="367" class="msg">quiz on cells.</text>
+<rect x="572" y="185" width="242" height="285" fill="#f3e8ff"/>
+<text x="693.0" y="162" text-anchor="middle" class="idx">[2]</text>
+<text x="590" y="227" class="role" style="fill:#6d28d9">ASSISTANT</text>
+<text x="590" y="295" class="msg">What part of cells</text>
+<text x="590" y="331" class="msg">feels least clear</text>
+<text x="590" y="367" class="msg">right now?</text>
+<rect x="814" y="185" width="242" height="285" fill="#dbeafe"/>
+<text x="935.0" y="162" text-anchor="middle" class="idx">[3]</text>
+<text x="832" y="227" class="role" style="fill:#1d4ed8">USER · Sam</text>
+<text x="832" y="295" class="msg">Help me start</text>
+<text x="832" y="331" class="msg">studying.</text>
+<rect x="1056" y="185" width="242" height="285" fill="#f3e8ff"/>
+<text x="1177.0" y="162" text-anchor="middle" class="idx">[4]</text>
+<text x="1074" y="227" class="role" style="fill:#6d28d9">ASSISTANT</text>
+<text x="1074" y="295" class="msg">What is one thing</text>
+<text x="1074" y="331" class="msg">you already know</text>
+<text x="1074" y="367" class="msg">about cells?</text>
+<rect x="1298" y="185" width="242" height="285" fill="#dbeafe"/>
+<text x="1419.0" y="162" text-anchor="middle" class="idx">[5]</text>
+<text x="1316" y="227" class="role" style="fill:#1d4ed8">USER · Sam</text>
+<text x="1316" y="295" class="msg">What was my quiz</text>
+<text x="1316" y="331" class="msg">topic again?</text>
+<line x1="330" y1="185" x2="330" y2="470" stroke="#0f172a" stroke-width="3"/>
+<line x1="572" y1="185" x2="572" y2="470" stroke="#0f172a" stroke-width="3"/>
+<line x1="814" y1="185" x2="814" y2="470" stroke="#0f172a" stroke-width="3"/>
+<line x1="1056" y1="185" x2="1056" y2="470" stroke="#0f172a" stroke-width="3"/>
+<line x1="1298" y1="185" x2="1298" y2="470" stroke="#0f172a" stroke-width="3"/>
+<rect x="60" y="185" width="1480" height="285" fill="none" stroke="#0f172a" stroke-width="6"/>
+<path d="M70 495 V520 H320 V495" fill="none" stroke="#334155" stroke-width="4"/>
+<text x="195.0" y="565" text-anchor="middle" class="grp">System prompt</text>
+<path d="M340 495 V520 H1288 V495" fill="none" stroke="#334155" stroke-width="4"/>
+<text x="814.0" y="565" text-anchor="middle" class="grp">Conversation history</text>
+<path d="M1308 495 V520 H1530 V495" fill="none" stroke="#334155" stroke-width="4"/>
+<text x="1419.0" y="565" text-anchor="middle" class="grp">Newest message</text>
+<text x="800.0" y="645" text-anchor="middle" class="note">The whole array is sent to the unchanged LLM, in this order, for every reply.</text>
+</svg>

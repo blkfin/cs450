@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CS 450 · L09 lecture notes · Inside an AI agent</title>
+<style>
+@page{size:letter;margin:.4in}*{box-sizing:border-box}
+body{font:11.4px/1.24 system-ui,sans-serif;color:#172635;max-width:7.7in;margin:auto;padding:0 6px}
+h1{font-size:20px;margin:0}h2{font-size:12.5px;margin:7px 0 3px;text-transform:uppercase;letter-spacing:.06em;color:#315f8c}
+.meta{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:2px solid #315f8c;padding-bottom:3px;margin-bottom:5px}
+.answer{border:2px solid #315f8c;border-radius:7px;padding:5px 8px;background:#eff6ff;font-size:12px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+dl{margin:0}dt{font-weight:700;display:inline}dd{display:inline;margin:0}dl div{margin:2px 0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:3px}
+.box{border:1px solid #8495a6;border-radius:6px;padding:4px 7px}
+.turn{border-left:4px solid #7c3aed;background:#f5f3ff}.cycle{border-left:4px solid #0f766e;background:#ecfdf5}
+.box b.k{display:block;font-size:12px;margin-bottom:1px}
+figure{margin:4px 0 0}svg{width:100%;height:auto;display:block}
+figcaption{font-size:10px;color:#526579;margin-top:1px}
+table{border-collapse:collapse;width:100%;margin-top:2px}th,td{border:1px solid #8495a6;padding:2px 4px;text-align:left;vertical-align:top}th{background:#e8eef7}
+code{font:1em ui-monospace,monospace}p{margin:1px 0}ul{margin:1px 0 1px 16px;padding:0}li{margin:1px 0}
+.foot{font-size:9.3px;color:#526579;margin-top:2px;border-top:1px solid #c7d0da;padding-top:1px}
+@media(max-width:650px){body{font-size:15px;padding:12px}.cols,.two{grid-template-columns:1fr}h1{font-size:24px}}
+</style></head><body>
+<div class="meta"><h1>Inside an AI agent — lecture notes</h1><p><strong>CS 450 · L09 · Sept 28, 2026</strong></p></div>
+
+<section class="answer"><strong>The answer to today's question.</strong> An agent is a goal-directed system in which a <strong>model</strong> chooses the next allowed <strong>action</strong>, a <strong>tool</strong> carries it out, the <strong>observation</strong> updates <strong>state</strong> the harness holds, and the loop <strong>stops</strong> on success, a blocker, a request for approval, or a limit. The model does not run the loop. The harness runs the loop and calls the model.</section>
+
+<h2>Our vocabulary</h2>
+<div class="cols">
+<dl>
+<div><dt>Goal.</dt> <dd>What counts as progress and done, in the user's words. Ticket example: two seats, ≤ $60 each including fees, show me first, never buy.</dd></div>
+<div><dt>Model.</dt> <dd>The language model. Given goal + current state, it emits one thing: a tool request or a reply to the user. It remembers nothing between calls.</dd></div>
+<div><dt>Harness.</dt> <dd>The ordinary code around the model. It validates each request, runs the tool, records the result, and decides whether to call the model again.</dd></div>
+<div><dt>Tool.</dt> <dd>A function the model may request: <code>schedule()</code>, <code>quote(game)</code>, <code>calendar_add(...)</code>. Tools act on or inspect the environment.</dd></div>
+</dl>
+<dl>
+<div><dt>Action / tool request.</dt> <dd>The model's structured ask: <code>{"name":"quote","arguments":{"game":"B"}}</code>. Choosing this is the one thing the model does.</dd></div>
+<div><dt>Observation / tool result.</dt> <dd>What comes back: <code>{"game":"B","all_in":57,"seats":2}</code>. It is evidence; the model's guess is not.</dd></div>
+<div><dt>State.</dt> <dd>Everything the harness re-supplies on the next call: goal, candidates, rejections, budget used, pending approval. Drop a line of it and the model repeats a mistake.</dd></div>
+<div><dt>Stopping condition.</dt> <dd>Success with a receipt, a blocker, a needed approval, or a limit (tool-call budget). "Done" is a claim about evidence, not confidence.</dd></div>
+</dl>
+</div>
+
+<h2>Cycle vs. turn</h2>
+<div class="two">
+<section class="box cycle"><b class="k">Loop cycle — the small unit</b>
+<p>One model decision and what follows it. If the decision is a <strong>tool request</strong>, the harness runs the tool, records the <strong>result</strong>, updates <strong>state</strong>, and the loop goes around again. If the decision is a <strong>reply to the user</strong>, there is no tool call and the turn ends.</p>
+<p>Count cycles by counting model decisions. Most cycles carry one tool call; a cycle may carry several.</p></section>
+<section class="box turn"><b class="k">Agent turn — the big unit</b>
+<p>Everything from one <strong>user prompt</strong> until the agent <strong>stops</strong>: it reports, asks a question, or asks for approval. One turn holds as many cycles as the harness allows.</p>
+<p>Count turns by counting user prompts. Budgets ("at most 6 tool calls"), approval gates, and the four stopping conditions all live at the turn boundary.</p></section>
+</div>
+
+<figure>
+<svg viewBox="0 0 760 292" xmlns="http://www.w3.org/2000/svg" font-family="system-ui,sans-serif" font-size="10.5" role="img" aria-label="Left: anatomy of one loop cycle as a ring of four steps. Right: two agent turns, each running from a user prompt through several cycles to an agent stop.">
+<defs><marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0f766e"/></marker><marker id="p" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#7c3aed"/></marker></defs>
+<text x="150" y="14" text-anchor="middle" font-weight="700" fill="#0f766e" font-size="12">ONE LOOP CYCLE</text>
+<path d="M150 94 A56 56 0 0 1 206 150" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#a)"/>
+<path d="M206 150 A56 56 0 0 1 150 206" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#a)"/>
+<path d="M150 206 A56 56 0 0 1 94 150" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#a)"/>
+<path d="M94 150 A56 56 0 0 1 150 94" fill="none" stroke="#0f766e" stroke-width="2.5" marker-end="url(#a)"/>
+<rect x="94" y="58" width="112" height="30" rx="5" fill="#ecfdf5" stroke="#0f766e"/><text x="150.0" y="70" text-anchor="middle" font-weight="700" fill="#172635">1 · model decides</text><text x="150.0" y="82" text-anchor="middle" font-size="9" fill="#172635">goal + state → one choice</text>
+<rect x="210" y="134" width="96" height="32" rx="5" fill="#ecfdf5" stroke="#0f766e"/><text x="258.0" y="146" text-anchor="middle" font-weight="700" fill="#172635">2 · tool request</text><text x="258.0" y="158" text-anchor="middle" font-size="9" fill="#172635">harness checks, runs it</text>
+<rect x="94" y="212" width="112" height="30" rx="5" fill="#ecfdf5" stroke="#0f766e"/><text x="150.0" y="224" text-anchor="middle" font-weight="700" fill="#172635">3 · tool result</text><text x="150.0" y="236" text-anchor="middle" font-size="9" fill="#172635">observation = evidence</text>
+<rect x="0" y="134" width="92" height="32" rx="5" fill="#ecfdf5" stroke="#0f766e"/><text x="46" y="146" text-anchor="middle" font-weight="700" fill="#172635">4 · state update</text><text x="46" y="158" text-anchor="middle" font-size="9" fill="#172635">re-supplied next call</text>
+<text x="150" y="134" text-anchor="middle" font-size="9"  fill="#526579">if step 1 chooses</text>
+<text x="150" y="146" text-anchor="middle" font-size="9"  fill="#526579">"reply to user",</text>
+<text x="150" y="158" text-anchor="middle" font-size="9"  fill="#526579">2–4 are skipped,</text>
+<text x="150" y="170" text-anchor="middle" font-size="9" font-weight="700" fill="#7c3aed">the turn ends</text>
+<text x="150" y="268" text-anchor="middle" font-size="9.5" fill="#526579">Each go-round is one cycle: C1, C2, C3 …</text>
+<text x="539.0" y="14" text-anchor="middle" font-weight="700" fill="#7c3aed" font-size="12">TWO AGENT TURNS (ticket example)</text>
+<rect x="318" y="24" width="442" height="112" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6 3"/><text x="326" y="38" font-weight="700" fill="#7c3aed">AGENT TURN 1</text>
+<rect x="326" y="50" width="74" height="34" rx="5" fill="#fff" stroke="#172635"/><text x="363" y="64" text-anchor="middle" font-weight="700">user prompt</text><text x="363" y="77" text-anchor="middle" font-size="9">"Find two seats…"</text>
+<line x1="400" y1="67" x2="410" y2="67" stroke="#7c3aed" stroke-width="2" marker-end="url(#p)"/>
+<circle cx="426" cy="67" r="18" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/><text x="426" y="71" text-anchor="middle" font-weight="700" fill="#0f766e">C1</text>
+<text x="426" y="97" text-anchor="middle" font-size="8"><tspan x="426" dy="0">schedule()</tspan><tspan x="426" dy="10">→ games A, B</tspan><tspan x="426" dy="10">state: A, B found</tspan></text>
+<line x1="444" y1="67" x2="470" y2="67" stroke="#0f766e" stroke-width="2" marker-end="url(#a)"/>
+<circle cx="488" cy="67" r="18" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/><text x="488" y="71" text-anchor="middle" font-weight="700" fill="#0f766e">C2</text>
+<text x="488" y="97" text-anchor="middle" font-size="8"><tspan x="488" dy="0">quote(A)</tspan><tspan x="488" dy="10">→ $62 all-in</tspan><tspan x="488" dy="10">state: A rejected</tspan></text>
+<line x1="506" y1="67" x2="532" y2="67" stroke="#0f766e" stroke-width="2" marker-end="url(#a)"/>
+<circle cx="550" cy="67" r="18" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/><text x="550" y="71" text-anchor="middle" font-weight="700" fill="#0f766e">C3</text>
+<text x="550" y="97" text-anchor="middle" font-size="8"><tspan x="550" dy="0">quote(B)</tspan><tspan x="550" dy="10">→ $57, 2 seats</tspan><tspan x="550" dy="10">state: B candidate</tspan></text>
+<line x1="568" y1="67" x2="594" y2="67" stroke="#0f766e" stroke-width="2" marker-end="url(#a)"/>
+<circle cx="612" cy="67" r="18" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/><text x="612" y="71" text-anchor="middle" font-weight="700" fill="#0f766e">C4</text>
+<text x="612" y="97" text-anchor="middle" font-size="8"><tspan x="612" dy="0">no tool call:</tspan><tspan x="612" dy="10">model replies</tspan></text>
+<line x1="630" y1="67" x2="642" y2="67" stroke="#7c3aed" stroke-width="2" marker-end="url(#p)"/>
+<rect x="644" y="45" width="108" height="44" rx="5" fill="#fff" stroke="#7c3aed" stroke-width="1.5"/><text x="698" y="59" text-anchor="middle" font-weight="700" fill="#7c3aed">agent stops: approval</text><text x="698" y="71" text-anchor="middle" font-size="8.5">"B, Oct 17, $57 all-in.</text><text x="698" y="82" text-anchor="middle" font-size="8.5">Add the reminder?"</text>
+<rect x="318" y="148" width="442" height="92" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2" stroke-dasharray="6 3"/><text x="326" y="162" font-weight="700" fill="#7c3aed">AGENT TURN 2</text>
+<rect x="326" y="174" width="74" height="34" rx="5" fill="#fff" stroke="#172635"/><text x="363" y="188" text-anchor="middle" font-weight="700">user prompt</text><text x="363" y="201" text-anchor="middle" font-size="9">"Yes."</text>
+<line x1="400" y1="191" x2="410" y2="191" stroke="#7c3aed" stroke-width="2" marker-end="url(#p)"/>
+<circle cx="430" cy="191" r="18" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/><text x="430" y="195" text-anchor="middle" font-weight="700" fill="#0f766e">C5</text>
+<text x="430" y="221" text-anchor="middle" font-size="8"><tspan x="430" dy="0">calendar_add(B)</tspan><tspan x="430" dy="10">→ ok, event id</tspan></text>
+<line x1="448" y1="191" x2="480" y2="191" stroke="#0f766e" stroke-width="2" marker-end="url(#a)"/>
+<circle cx="498" cy="191" r="18" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/><text x="498" y="195" text-anchor="middle" font-weight="700" fill="#0f766e">C6</text>
+<text x="498" y="221" text-anchor="middle" font-size="8"><tspan x="498" dy="0">no tool call:</tspan><tspan x="498" dy="10">model replies</tspan></text>
+<line x1="516" y1="191" x2="642" y2="191" stroke="#7c3aed" stroke-width="2" marker-end="url(#p)"/>
+<rect x="644" y="169" width="108" height="44" rx="5" fill="#fff" stroke="#7c3aed" stroke-width="1.5"/><text x="698" y="183" text-anchor="middle" font-weight="700" fill="#7c3aed">agent stops: success</text><text x="698" y="195" text-anchor="middle" font-size="8.5">"Reminder added."</text><text x="698" y="206" text-anchor="middle" font-size="8.5">Evidence: the returned id.</text>
+<text x="539.0" y="262" text-anchor="middle" font-size="9.5" fill="#526579">Count: 2 user prompts · 2 agent turns · 6 cycles · 4 tool calls.</text><text x="539.0" y="275" text-anchor="middle" font-size="9.5" fill="#526579">The approval question ends turn 1; the user's "Yes" starts turn 2.</text>
+</svg>
+<figcaption>Left: what happens inside one cycle. Right: a turn is a run of cycles between a user prompt and an agent stop. Same loop, two grains.</figcaption>
+</figure>
+
+<h2>Reading a trace</h2>
+<table><thead><tr><th style="width:22%">You want to know</th><th style="width:38%">Count</th><th>Why it matters</th></tr></thead><tbody>
+<tr><td>How many turns?</td><td>User prompts. Each agent stop (report, question, approval) closes one.</td><td>Approval gates and "ask me first" rules live here. A turn that never stops is a runaway agent.</td></tr>
+<tr><td>How many cycles?</td><td>Model decisions. The last cycle in a turn is the one with no tool request.</td><td>Each cycle is a chance to adapt to evidence, and a chance to drift. State must be re-supplied every cycle.</td></tr>
+<tr><td>How many tool calls?</td><td>Tool requests the harness actually ran.</td><td>This is what budgets and permissions count. Rejected requests are not calls.</td></tr>
+</tbody></table>
+
+<p class="foot">Companion to today's deck and the "book a club room" activity. Use these words on the worksheet: agent turn, loop cycle, tool request, tool result, state, stopping condition. Ticket agent, games, and prices are fictional.</p>
+</body></html>

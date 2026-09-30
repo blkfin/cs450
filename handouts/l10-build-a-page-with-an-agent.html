@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CS 450 L10 · Build a public web page with a real AI agent</title><style>body{font:16px/1.5 system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#17202a}h1{font-size:1.6rem}h2{margin-top:1.6rem;border-bottom:1px solid #ccd}pre{background:#f3f5f8;padding:.6rem .8rem;overflow:auto}code{font-family:Menlo,Consolas,monospace;background:#f3f5f8;padding:0 .2em}pre code{padding:0}blockquote{border-left:4px solid #315f8c;background:#eff6ff;margin:1rem 0;padding:.5rem 1rem}table{border-collapse:collapse}td,th{border:1px solid #999;padding:.3rem .6rem;text-align:left;vertical-align:top}th{background:#eee}@media print{body{margin:0;font-size:12px}}</style></head><body>
+<h1>CS 450: Build a public web page with a real AI agent</h1>
+<p><b>Wednesday, September 30, 2026</b></p>
+<h2>What you're doing today</h2>
+<p>On Monday you learned what an agent is: a model that requests actions, and software that checks and carries them out with tools. Today you'll use a real one. Cursor's agent will run on agate, write a web page, and put it on the public internet. You give it a result, boundaries, and a way to check its work.</p>
+<h2>Before you start</h2>
+<ul><li>Log in to agate from your terminal, the same way you did before.</li><li>Sign up for a free Cursor account at <b>cursor.com</b>. The free plan is called Hobby, and it doesn't need a credit card.</li></ul>
+<h2>Step 1: Install Cursor's agent (one command)</h2>
+<p>Copy and paste this into your agate terminal:</p>
+<pre>curl https://cursor.com/install -fsS | bash</pre>
+<p>When the installer finishes, it may ask you to run one more line to update your path. If it does, run it. If you're not sure, close your terminal, log in to agate again, and continue.</p>
+<h2>Step 2: Log in</h2>
+<p>agate has no web browser, so ask Cursor to print a login link instead:</p>
+<pre>NO_OPEN_BROWSER=1 agent login</pre>
+<p>Copy the link it prints, open it in the web browser on your laptop, and sign in to Cursor. Then go back to your terminal. It should say you're logged in.</p>
+<h2>Step 3: Start the agent</h2>
+<pre>agent</pre>
+<h2>Three rules</h2>
+<ol><li><b>Your pages are public.</b> Don't put your full name, photo, student ID, phone number or anything else personal on them.</li><li><b>Your agent requests are limited.</b> The free plan gives a limited number of requests each month, and Cursor doesn't publish the exact number. Every prompt you send uses some of it. Today should take 2–4 prompts.</li><li><b>Read before you approve.</b> Some actions may run automatically. If the agent asks to run a command and you don't understand it, ask your neighbor or raise your hand before you say yes.</li></ol>
+<h2>Step 4: Hello world, together</h2>
+<p>We'll do this one as a class. Paste this prompt:</p>
+<blockquote>Create a page that displays “Hello, CS 450!” at ~/public_html/cs450/index.html. Use HTML and CSS; install no software. Keep my other files unchanged. If the web server cannot read the page, explain the permission change you propose before making it. Tell me the page's public address so I can open it and check it.</blockquote>
+<p><b>Watch what happens.</b> The agent will look at your folders, decide on a step, and may <b>ask your permission</b> before it runs a command. That's Monday's lesson happening on screen: the model requests an action; software checks and runs it. Some actions run automatically and others wait for you. Read what it wants to run before you say yes.</p>
+<p>Then open this address in your laptop's browser:</p>
+<pre>https://www.cs.unh.edu/~your-agate-username/cs450/</pre>
+<p>If your page loads, you've checked that it was published. Also check that it displays what you asked for.</p>
+<h2>Step 5: Make your own page (this is today's participation)</h2>
+<p>Now make a second page on your own. Start from this prompt and fill in the brackets:</p>
+<blockquote>Create a new page at ~/public_html/cs450/l10.html. Start from my hello page. Give it [a dark background and large headings, or your own design choice]. Add a short section about [a public topic I choose]. Leave index.html unchanged. Use only HTML and CSS; install nothing. Make sure the web server can read it, then tell me the public address.</blockquote>
+<p>Test the result. If something is wrong, tell the agent: “When I ___, I expected ___, but ___.” Then open your page:</p>
+<pre>https://www.cs.unh.edu/~your-agate-username/cs450/l10.html</pre>
+<p><b>Submit that URL on Canvas.</b> You get credit if it loads and it's different from your hello world page. Your taste isn't being graded.</p>
+<h2>If something goes wrong</h2>
+<table><tr><th>What you see</th><th>What to do</th></tr><tr><td><code>agent: command not found</code></td><td>Close your terminal, log in to agate again, and try once more. If that doesn't work, run the path line the installer printed at the end of Step 1.</td></tr><tr><td>The login link doesn't work, or has expired</td><td>Run the Step 2 command again to get a new link.</td></tr><tr><td>Your browser shows <b>403 Forbidden</b></td><td>Tell the agent: "My page shows 403 Forbidden. Fix the permissions so the web server can read it."</td></tr><tr><td>Your browser shows <b>404 Not Found</b></td><td>Check the username in your address (your agate login, after the <code>~</code>) and the folder name <code>cs450</code>.</td></tr><tr><td>You're stuck after 5 minutes</td><td>Pair up with a neighbor whose page worked. Finish yours after class and submit the URL by Friday.</td></tr></table>
+</body></html>

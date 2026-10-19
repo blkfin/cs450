@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CS 450 L13 · Setup checklist and barrier swap</title><style>body{font:16px/1.5 system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#17202a}h1{font-size:1.6rem}h2{margin-top:1.6rem;border-bottom:1px solid #ccd}pre{background:#f3f5f8;padding:.6rem .8rem;overflow:auto}code{font-family:Menlo,Consolas,monospace;background:#f3f5f8;padding:0 .2em}pre code{padding:0}blockquote{border-left:4px solid #315f8c;background:#eff6ff;margin:1rem 0;padding:.5rem 1rem}table{border-collapse:collapse}td,th{border:1px solid #999;padding:.3rem .6rem;text-align:left;vertical-align:top}th{background:#eee}@media print{body{margin:0;font-size:12px}}</style></head><body>
+<h1>CS 450 L13: Setup checklist and barrier swap</h1>
+<p><b>Monday, October 19, 2026</b></p>
+
+<h2>Handout 1: Get OpenCode talking to Deep Thought (minutes 10–30)</h2>
+<p><b>Rule for today: when you're stuck, paste the exact error into an AI tool first, then try its fix, then check whether it worked. Then raise your hand.</b><br>
+<b>Before you paste anything, delete any key or password from it.</b></p>
+<ol>
+<li><p><b>Log in to agate.</b> Same command on Windows and Mac:</p>
+<pre>ssh your-unh-username@agate.cs.unh.edu</pre>
+<p>First time? Type <code>yes</code> when it asks about the host.</p></li>
+<li><p><b>Password.</b> Nothing shows on screen while you type. That's normal. Type it and press Enter. Never type it anywhere others can see it.</p></li>
+<li><p><b>OpenCode installed?</b> Run <code>opencode --version</code>. If you get "command not found":</p>
+<pre>npm config set prefix ~/.npm-global
+echo 'export PATH="$HOME/.npm-global/bin:$PATH"' &gt;&gt; ~/.bashrc
+source ~/.bashrc
+npm install -g opencode-ai
+opencode --version</pre></li>
+<li><p><b>Your Deep Thought key.</b> Open your settings file in the editor:</p>
+<pre>nano ~/.bashrc</pre>
+<p>Use the arrow keys to go to the very bottom, then type one new line:</p>
+<pre>export DEEPTHOUGHT_API_KEY=&lt;your key&gt;</pre>
+<p>Save with <b>Ctrl+O</b>, then <b>Enter</b>. Leave with <b>Ctrl+X</b>. Then run <code>source ~/.bashrc</code>.</p>
+<p>Check that the key is there <b>without showing it</b>:</p>
+<pre>[ -n "$DEEPTHOUGHT_API_KEY" ] &amp;&amp; echo "key is set" || echo "key is missing"</pre>
+<p>"key is missing" means OpenCode will fail without telling you why. Never <code>echo</code> the key itself: it shows on screen, and on the projector.</p></li>
+<li><p><b>Point OpenCode at Deep Thought.</b> Make the folder, then open a new file:</p>
+<pre>mkdir -p ~/.config/opencode
+nano ~/.config/opencode/opencode.json</pre>
+<p>Paste everything in the box below (right-click or Ctrl+Shift+V in most terminals), save with <b>Ctrl+O</b>, <b>Enter</b>, and leave with <b>Ctrl+X</b>. Your key does not go in this file; it reads the key from step 4.</p>
+<pre>{
+  "$schema": "https://opencode.ai/config.json",
+  "enabled_providers": ["deepthought"],
+  "model": "deepthought/ets:aws:us.anthropic.claude-sonnet-4-6",
+  "provider": {
+    "deepthought": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "DeepThought",
+      "options": {
+        "baseURL": "https://dtcontroller.sr.unh.edu:4242/openai/v1",
+        "apiKey": "{env:DEEPTHOUGHT_API_KEY}"
+      },
+      "models": {
+        "ets:aws:us.anthropic.claude-sonnet-4-6": {
+          "name": "DeepThought Claude Sonnet 4.6",
+          "tool_call": true,
+          "limit": { "context": 200000, "output": 8192 }
+        }
+      }
+    }
+  }
+}</pre></li>
+<li><p><b>Test it.</b> <code>mkdir l13-test &amp;&amp; cd l13-test &amp;&amp; opencode</code>. Ask it to create and run <code>hello.py</code>. <b>Done when the file exists and ran.</b> A chat reply alone doesn't count.</p></li>
+</ol>
+<p><b>Minute 30: stop, wherever you are.</b> Not done? The CS tutoring center (second floor, about 2–6 PM, Mon–Fri) or Matt's office hours (Mon and Wed 9–11).</p>
+<p>Did the AI's fix work the first time? Keep a tally: ___ fixes tried, ___ worked.</p>
+
+<h2>Handout 2: Barrier swap (minutes 30–47)</h2>
+<p>Use <b>any chat AI you already use</b>. You don't need today's setup to work.</p>
+<ol>
+<li><b>Missed Friday?</b> Write your card now (2 minutes):<br><i>"I want to ______. What's really stopping me is ______."</i></li>
+<li><b>Write your check first.</b> On the back: "I'd try it if ______." (Example: "I could start it this week, in under 30 minutes, for free.")</li>
+<li><b>Swap cards.</b> Your neighbor opens a <b>fresh chat</b>, pastes only your card line, and asks for one way past the barrier.</li>
+<li><b>You judge it</b> against your own check: <b>would try</b> or <b>nope</b>.</li>
+<li><b>If there's time:</b> add two sentences from Friday's interview. Your neighbor reruns it in a new fresh chat. Judge it again. Did one change make the difference?</li>
+</ol>
+<p>Share only what you're comfortable sharing. You decide how much context to give.</p>
+</body></html>

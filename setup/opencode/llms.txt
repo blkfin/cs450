@@ -1,0 +1,143 @@
+# CS 450: Set up OpenCode with DeepThought
+
+> Instructions for a student's Cursor agent. Configure OpenCode on the student's
+> own computer. Matt will walk the student through creating a DeepThought key.
+> The student enters that key privately; the agent never handles its value.
+
+Give Cursor this entire file and the adjacent `setup-key.py`. Student prompt:
+"Follow llms.txt to set up OpenCode for CS 450. Do the setup for me, then tell
+me exactly what to run myself to enter my key privately. Never ask for my key."
+These are explicit task instructions; no filename auto-discovery is assumed.
+
+## Boundaries
+
+- Target the student's local machine, or their already configured local WSL
+  environment if Cursor is attached there. Do not switch to agate, SSH to a
+  server, install WSL, or use a cloud agent. If this is a remote/cloud session,
+  stop and ask the student to open local Cursor first.
+- Never ask the student to paste a key/password into chat, an agent terminal,
+  an agent tool's stdin, a command argument, an environment variable assignment,
+  a screenshot, or a source file. Never read, search, upload, hash, count the
+  characters of, or display the saved key. Do not inspect existing credentials.
+- Never run `env`, `printenv`, `set`, shell tracing, `opencode debug config`,
+  or exports of OpenCode sessions for troubleshooting; resolved config can
+  contain credentials. Do not read shell profiles to hunt for a key.
+- Do not launch OpenCode with an authenticated key through an agent tool.
+  Its output may expose provider diagnostics. The student runs the final test.
+- Key storage is plaintext protected by local permissions, not a vault or a
+  sandbox against Cursor. Keeping it out of logs relies on following these
+  instructions and doing key entry in a separate, human-operated terminal.
+
+## 1. Inspect prerequisites without secrets
+
+Identify Windows PowerShell, macOS, Linux, or WSL. Keep all steps in that same
+environment: a Windows install/key does not configure WSL, or vice versa.
+Check only OS, `opencode --version`, `node --version`, `npm --version`, and
+`python3 --version` (Windows: `py -3 --version`). Missing OpenCode is expected.
+Use Python 3.9 or later for the helper. If Node/npm or Python is missing, give
+the student the official installer link and ask them to install it and reopen
+Cursor; do not acquire admin access or silently change system settings.
+
+## 2. Install OpenCode
+
+This handout uses the OpenCode 1.x configuration documented by UNH. Install
+`npm install -g opencode-ai@1` if OpenCode is missing. Reuse an existing 1.x
+installation. If a different major version is installed, stop and report it;
+do not downgrade it or apply this config to an incompatible major.
+Record the installed version from `opencode --version`.
+
+If npm reports EACCES on macOS/Linux/WSL, do not use sudo or change ownership
+of system folders. Use a user-owned prefix: `npm config set prefix ~/.npm-global`
+and add the literal line `export PATH="$HOME/.npm-global/bin:$PATH"` once to
+`~/.zshrc` for zsh or `~/.bashrc` for bash. Change only that PATH line, without
+reading/displaying the profile (it may already contain secrets). Use
+`$HOME/.npm-global/bin/opencode` for this session; a new terminal loads PATH.
+For another shell or a Windows permission error, stop and report the specific
+installer problem. Do not improvise a different machine/account.
+
+## 3. Prepare the public configuration
+
+Place `setup-key.py` in a local folder the student can find, outside a shared
+or synced course repository. You may read this helper's source; it contains no
+key. Run `python3 setup-key.py prepare` (Windows: `py -3 setup-key.py prepare`).
+Quote the full script path if using a different working directory.
+
+The helper creates `~/.config/opencode/opencode.json`, allowing only the
+DeepThought provider, with Sonnet 4.6 as default and sharing disabled. It uses
+`https://dtcontroller.sr.unh.edu:4242/openai/v1` and this key reference:
+`{file:~/.config/cs450-deepthought/api-key}`. No shell-profile key export or
+shell reload is required. The config contains no secret.
+
+The helper refuses a differing existing config, JSONC, custom config variables,
+or symlinked setup paths. Keep existing settings untouched and report the
+conflict; do not print their contents or overwrite them. Do not remove an
+existing key or edit old shell-profile secrets as part of this setup.
+
+## 4. Hand key entry to the student
+
+Do NOT run the `key` action through an agent tool, even a tool with a PTY.
+Give the student the exact command with an absolute, quoted script path:
+
+- macOS/Linux/WSL: `python3 "/absolute/path/setup-key.py" key`
+- Windows PowerShell: `py -3 "C:\absolute\path\setup-key.py" key`
+
+Tell the student: "After Matt helps you create your DeepThought key, open
+Terminal on Mac, PowerShell on Windows, or your WSL terminal yourself, outside
+Cursor's agent terminal. Run this command, paste the key at the hidden prompt,
+and press Enter. Nothing will appear while you paste. Tell me only whether it
+said 'Key saved privately.' Do not send the key or a screenshot."
+
+The helper refuses redirected input and getpass's echoing fallback. It saves
+the key outside the project in `~/.config/cs450-deepthought/api-key`. On POSIX
+the directory is mode 700 and the key is mode 600. On native Windows the new
+directory receives an ACL for the current user's SID before key creation; an
+existing key directory is refused, so recovery/rotation needs instructor help.
+The helper makes no network requests and prints no key value.
+
+If entry fails, ask only for the helper's fixed error message. Do not ask for
+the key or the contents of any config/secret file. If a key was pasted into
+chat or a tool, tell the student to revoke it in DeepThought and create a new
+one with Matt; deleting the visible message does not undo exposure.
+
+## 5. Check presence, then have the student test the connection
+
+After the student confirms key entry, you may run `python3 setup-key.py check`
+(Windows: `py -3 setup-key.py check`). This prints only presence/missing status;
+it does not read the key or prove authentication.
+
+Have the student create a NEW empty local folder, open a normal terminal
+there, and run `opencode`. Keep it outside any existing repository so project
+config cannot override the course settings. In `/models`, verify DeepThought
+and `ets:aws:us.anthropic.claude-sonnet-4-6`. Ask OpenCode:
+"Create hello.py that prints Hello CS 450, run it, and show the output."
+Use `python` or `python3` as appropriate to the installed interpreter.
+Success means the file exists AND ran with that output through DeepThought.
+An installed executable, a model listing, or a chat reply is insufficient.
+
+If 401/403: ask Matt to check key eligibility/validity; never ask to see the
+key. For connection errors: check campus/VPN requirements with Matt; do not
+disable TLS verification or change the endpoint. For an unsupported model or
+schema: report exact OpenCode version and a redacted error category. Do not
+switch providers or invent a replacement model. The old KB's recommendation
+to run `opencode debug config` is intentionally excluded because it may reveal
+the resolved key.
+
+Report: OS/environment, OpenCode version, config prepared or conflict, key
+presence only, and student-confirmed smoke-test result (or "not yet tested").
+Never claim an authenticated test succeeded without the student's receipt.
+
+## Sources
+
+- [UNH OpenCode setup](https://td.usnh.edu/TDClient/60/Portal/KB/Article/5506/): DeepThought endpoint/model and OpenCode 1.x provider configuration, checked 2026-10-19.
+- [OpenCode config](https://opencode.ai/docs/config/): file references, precedence, and enabled providers, checked 2026-10-19.
+- [OpenCode installation](https://opencode.ai/docs/): installation options.
+- [Node.js](https://nodejs.org/en/download): Node/npm prerequisite installer.
+- [Python](https://www.python.org/downloads/): helper prerequisite installer.
+- [llms.txt proposal](https://llmstxt.org/): agent-readable Markdown convention; this file is supplied explicitly to Cursor.
+
+Course source: `planning/week-08/l13-your-own-benchmark/companions/activity.md`
+relative to the Fall 2026 course directory. That checklist targets agate;
+this handout intentionally targets the student's own computer at Matt's request.
+Matt owns key creation. No student key or campus machine was used to validate
+this bundle; live course connectivity and native Windows/macOS testing remain
+to be confirmed before calling it classroom-tested.

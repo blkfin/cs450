@@ -1,7 +1,7 @@
 # CS 450: Set up OpenCode with DeepThought
 
 > Instructions for a student's Cursor agent. Configure OpenCode on the student's
-> own computer. Matt will walk the student through creating a DeepThought key.
+> own computer. your instructor will walk the student through creating a DeepThought key.
 > The student enters that key privately; the agent never handles its value.
 
 Give Cursor this entire file and the adjacent `setup-key.py`. Student prompt:
@@ -81,7 +81,7 @@ Give the student the exact command with an absolute, quoted script path:
 - macOS/Linux/WSL: `python3 "/absolute/path/setup-key.py" key`
 - Windows PowerShell: `py -3 "C:\absolute\path\setup-key.py" key`
 
-Tell the student: "After Matt helps you create your DeepThought key, open
+Tell the student: "After your instructor helps you create your DeepThought key, open
 Terminal on Mac, PowerShell on Windows, or your WSL terminal yourself, outside
 Cursor's agent terminal. Run this command, paste the key at the hidden prompt,
 and press Enter. Nothing will appear while you paste. Tell me only whether it
@@ -97,7 +97,7 @@ The helper makes no network requests and prints no key value.
 If entry fails, ask only for the helper's fixed error message. Do not ask for
 the key or the contents of any config/secret file. If a key was pasted into
 chat or a tool, tell the student to revoke it in DeepThought and create a new
-one with Matt; deleting the visible message does not undo exposure.
+one with your instructor; deleting the visible message does not undo exposure.
 
 ## 5. Check presence, then have the student test the connection
 
@@ -114,8 +114,8 @@ Use `python` or `python3` as appropriate to the installed interpreter.
 Success means the file exists AND ran with that output through DeepThought.
 An installed executable, a model listing, or a chat reply is insufficient.
 
-If 401/403: ask Matt to check key eligibility/validity; never ask to see the
-key. For connection errors: check campus/VPN requirements with Matt; do not
+If 401/403: ask your instructor to check key eligibility/validity; never ask to see the
+key. For connection errors: check campus/VPN requirements with your instructor; do not
 disable TLS verification or change the endpoint. For an unsupported model or
 schema: report exact OpenCode version and a redacted error category. Do not
 switch providers or invent a replacement model. The old KB's recommendation
@@ -137,7 +137,7 @@ Never claim an authenticated test succeeded without the student's receipt.
 
 Course source: `planning/week-08/l13-your-own-benchmark/companions/activity.md`
 relative to the Fall 2026 course directory. That checklist targets agate;
-this handout intentionally targets the student's own computer at Matt's request.
-Matt owns key creation. No student key or campus machine was used to validate
+this handout intentionally targets the student's own computer at your instructor's request.
+Your instructor owns key creation. No student key or campus machine was used to validate
 this bundle; live course connectivity and native Windows/macOS testing remain
 to be confirmed before calling it classroom-tested.

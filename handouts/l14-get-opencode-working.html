@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>CS 450 · Get OpenCode working, step by step</title><style>body{font:16px/1.5 system-ui,sans-serif;max-width:46rem;margin:2rem auto;padding:0 1rem;color:#17202a}h1{font-size:1.6rem}h2{margin-top:1.8rem;border-bottom:1px solid #ccd}h3{margin:1.2rem 0 .2rem}pre{background:#f3f5f8;padding:.5rem .8rem;overflow:auto;white-space:pre-wrap;margin:.3rem 0}pre.see{background:#fff;border:1px dashed #8a9;}code{font-family:Menlo,Consolas,monospace;background:#f3f5f8;padding:0 .2em}pre code{padding:0}blockquote{border-left:4px solid #315f8c;background:#eff6ff;margin:1rem 0;padding:.5rem 1rem}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:.3rem .6rem;text-align:left;vertical-align:top}th{background:#eee}.cp{border:2px solid #315f8c;padding:.3rem .8rem;margin:.8rem 0;font-weight:600}.lbl{font-size:.85rem;color:#456;margin:.4rem 0 0}.if{margin:.2rem 0 .6rem}a{color:#1f4f7f}@media print{body{margin:0;font-size:11px}h2,h3{break-after:avoid}tr,.cp,pre,.step{break-inside:avoid}}</style></head><body>
 <h1>CS 450: Get OpenCode working, step by step</h1>
-<p><b>Wednesday, October 21, 2026.</b> Today's goal: <b>OpenCode running on your account, and one small checked task done with it.</b> Matt leads the steps from the front. Go at the room's pace, and don't skip ahead.</p>
+<p><b>Wednesday, October 21, 2026.</b> Today's goal: <b>OpenCode running on your account, and one small checked task done with it.</b> Your instructor leads the steps from the front. Go at the room's pace, and don't skip ahead.</p>
 
 <blockquote><b>How to use this sheet</b><br>
 Every step has three parts: <b>Type</b> (exactly this), <b>You should see</b> (something like this), and <b>If not</b> (which fix to use, at the back of the sheet).<br>
@@ -24,7 +24,7 @@ ls
 git status</pre>
 <p class="lbl">You should see: <code>ls</code> prints nothing (the folder is empty), and <code>git status</code> says</p>
 <pre class="see">fatal: not a git repository (or any of the parent directories): .git</pre>
-<p class="if">Windows: <code>mkdir</code> prints a small table first; that's fine. <code>git</code> not found or not recognized? Also fine. <code>mkdir</code> says the folder exists? Type <code>cd ~</code> and use <code>cs450-oct21-a-2</code> instead. <code>git status</code> shows <code>On branch …</code>? You're inside a project folder: stop and ask Matt.</p>
+<p class="if">Windows: <code>mkdir</code> prints a small table first; that's fine. <code>git</code> not found or not recognized? Also fine. <code>mkdir</code> says the folder exists? Type <code>cd ~</code> and use <code>cs450-oct21-a-2</code> instead. <code>git status</code> shows <code>On branch …</code>? You're inside a project folder: stop and ask your instructor.</p>
 <p>Now start OpenCode:</p>
 <pre>opencode</pre>
 <p>OpenCode opens a full-screen view with a box to type in. <b>First choose the course model:</b> type <code>/models</code>, press Enter, and pick <b>DeepThought Claude Sonnet 4.6</b>. Then type:</p>
@@ -44,10 +44,10 @@ git status</pre>
 <p>Then check whether your settings file is <b>Monday's handout file</b>. Again this prints a number only:</p>
 <pre>grep -c '{env:DEEPTHOUGHT_API_KEY}' ~/.config/opencode/opencode.json</pre>
 <pre class="see">1      (Monday's handout file: move it aside with the line below)
-0      (a different file: don't touch it; ask Matt at checkpoint A)
+0      (a different file: don't touch it; ask your instructor at checkpoint A)
 … No such file or directory      (no file: go on)</pre>
 <p class="if"><b>Only if it printed 1,</b> move it aside. This line refuses to overwrite an earlier backup:</p>
-<pre>[ -e ~/.config/opencode/opencode-monday.json ] &amp;&amp; echo "backup already exists: ask Matt" || mv ~/.config/opencode/opencode.json ~/.config/opencode/opencode-monday.json</pre>
+<pre>[ -e ~/.config/opencode/opencode-monday.json ] &amp;&amp; echo "backup already exists: ask your instructor" || mv ~/.config/opencode/opencode.json ~/.config/opencode/opencode-monday.json</pre>
 <p class="if">It prints nothing when it worked. Then start Route A at step A3. <b>Never</b> open <code>.bashrc</code> on the projector, and never <code>echo</code> the key.</p>
 
 <h2 id="pick">Pick your route (1 minute)</h2>
@@ -111,8 +111,8 @@ ls setup-key.py</pre>
 <pre class="see">Course configuration ready. No key was read or displayed.</pre>
 <p class="if"><b>If not:</b> <code>Existing OpenCode configuration differs</code> → <a href="#f12">F12</a>. <code>An alternate OpenCode configuration exists</code> → <a href="#f13">F13</a>.</p></div>
 
-<div class="step"><h3>A7. Your key (Matt shows this on screen; wait for him)</h3>
-<p>Create your Deep Thought key the way Matt shows you, and copy it. Then type:</p>
+<div class="step"><h3>A7. Your key (your instructor shows this on screen; wait for them)</h3>
+<p>Create your Deep Thought key the way your instructor shows you, and copy it. Then type:</p>
 <pre>python3 setup-key.py key</pre>
 <p class="lbl">You should see</p>
 <pre class="see">Paste your DeepThought key (hidden), then press Enter:</pre>
@@ -139,7 +139,7 @@ ls
 git status</pre>
 <p class="lbl">You should see: <code>ls</code> prints nothing (the folder is empty), and <code>git status</code> says</p>
 <pre class="see">fatal: not a git repository (or any of the parent directories): .git</pre>
-<p class="if">Windows: <code>mkdir</code> prints a small table first; that's fine. <code>git</code> not found or not recognized? Also fine. <code>mkdir</code> says the folder exists? Type <code>cd ~</code> and use <code>cs450-oct21-b-2</code> instead. <code>git status</code> shows <code>On branch …</code>? You're inside a project folder: stop and ask Matt.</p>
+<p class="if">Windows: <code>mkdir</code> prints a small table first; that's fine. <code>git</code> not found or not recognized? Also fine. <code>mkdir</code> says the folder exists? Type <code>cd ~</code> and use <code>cs450-oct21-b-2</code> instead. <code>git status</code> shows <code>On branch …</code>? You're inside a project folder: stop and ask your instructor.</p>
 <p>Now start OpenCode:</p>
 <pre>opencode</pre>
 <p>OpenCode opens a full-screen view with a box to type in. <b>First choose the course model:</b> type <code>/models</code>, press Enter, and pick <b>DeepThought Claude Sonnet 4.6</b>. Then type:</p>
@@ -148,7 +148,7 @@ git status</pre>
 <p class="lbl">You should see, in OpenCode's answer</p>
 <pre class="see">Hello CS 450</pre>
 <p class="if"><b>If not:</b> it only chats and makes no file → <a href="#f20">F20</a>. <code>401</code> or <code>403</code> → <a href="#f18">F18</a>. It spins for over a minute → <a href="#f19">F19</a>.</p></div>
-<div class="cp">✔ Checkpoint D: with DeepThought Claude Sonnet 4.6 selected, <code>hello.py</code> exists in the fresh folder <b>and</b> printed <code>Hello CS 450</code>. A chat reply alone doesn't count. Matt or neighbour checks: ____ &nbsp;→ Go to <a href="#task">Part 2</a>.</div>
+<div class="cp">✔ Checkpoint D: with DeepThought Claude Sonnet 4.6 selected, <code>hello.py</code> exists in the fresh folder <b>and</b> printed <code>Hello CS 450</code>. A chat reply alone doesn't count. Instructor or neighbour checks: ____ &nbsp;→ Go to <a href="#task">Part 2</a>.</div>
 
 <h2>Route B: your laptop, step by step</h2>
 <p>Open <b>Terminal</b> (Mac: Cmd+Space, type Terminal) or <b>PowerShell</b> (Windows: Start, type PowerShell). Not Cursor, and not an AI tool's terminal.</p>
@@ -183,8 +183,8 @@ Windows:  py -3 "$HOME\Downloads\setup-key.py" prepare</pre>
 <pre class="see">Course configuration ready. No key was read or displayed.</pre>
 <p class="if"><b>If not:</b> <code>Existing OpenCode configuration differs</code> → <a href="#f12">F12</a>. <code>An alternate OpenCode configuration exists</code> → <a href="#f13">F13</a>.</p></div>
 
-<div class="step"><h3>B5. Your key (Matt shows this on screen; wait for him)</h3>
-<p>Create and copy your key the way Matt shows you. Then, the same command with <code>key</code> at the end:</p>
+<div class="step"><h3>B5. Your key (your instructor shows this on screen; wait for them)</h3>
+<p>Create and copy your key the way your instructor shows you. Then, the same command with <code>key</code> at the end:</p>
 <pre>Mac:      python3 ~/Downloads/setup-key.py key
 Windows:  py -3 "$HOME\Downloads\setup-key.py" key</pre>
 <pre class="see">Paste your DeepThought key (hidden), then press Enter:</pre>
@@ -211,7 +211,7 @@ ls
 git status</pre>
 <p class="lbl">You should see: <code>ls</code> prints nothing (the folder is empty), and <code>git status</code> says</p>
 <pre class="see">fatal: not a git repository (or any of the parent directories): .git</pre>
-<p class="if">Windows: <code>mkdir</code> prints a small table first; that's fine. <code>git</code> not found or not recognized? Also fine. <code>mkdir</code> says the folder exists? Type <code>cd ~</code> and use <code>cs450-oct21-b-2</code> instead. <code>git status</code> shows <code>On branch …</code>? You're inside a project folder: stop and ask Matt.</p>
+<p class="if">Windows: <code>mkdir</code> prints a small table first; that's fine. <code>git</code> not found or not recognized? Also fine. <code>mkdir</code> says the folder exists? Type <code>cd ~</code> and use <code>cs450-oct21-b-2</code> instead. <code>git status</code> shows <code>On branch …</code>? You're inside a project folder: stop and ask your instructor.</p>
 <p>Now start OpenCode:</p>
 <pre>opencode</pre>
 <p>OpenCode opens a full-screen view with a box to type in. <b>First choose the course model:</b> type <code>/models</code>, press Enter, and pick <b>DeepThought Claude Sonnet 4.6</b>. Then type:</p>
@@ -220,7 +220,7 @@ git status</pre>
 <p class="lbl">You should see, in OpenCode's answer</p>
 <pre class="see">Hello CS 450</pre>
 <p class="if"><b>If not:</b> only a chat reply → <a href="#f20">F20</a>. <code>401</code>/<code>403</code> → <a href="#f18">F18</a>. Spins over a minute → <a href="#f19">F19</a>.</p></div>
-<div class="cp">✔ Checkpoint D: with DeepThought Claude Sonnet 4.6 selected, <code>hello.py</code> exists in the fresh folder <b>and</b> printed <code>Hello CS 450</code>. A chat reply alone doesn't count. Matt or neighbour checks: ____</div>
+<div class="cp">✔ Checkpoint D: with DeepThought Claude Sonnet 4.6 selected, <code>hello.py</code> exists in the fresh folder <b>and</b> printed <code>Hello CS 450</code>. A chat reply alone doesn't count. Instructor or neighbour checks: ____</div>
 
 <h2 id="task">Part 2: Your first checked task (minutes 35–45)</h2>
 <p><b>Write your check first.</b> Count by hand before the AI does. Count each word in the list as a <b>whole word only</b>, ignoring capital letters and punctuation.</p>
@@ -234,13 +234,13 @@ git status</pre>
 <div class="cp">✔ Done when <code>count.py</code> exists, it ran, and you checked its total against your own count. Neighbour checks: ____</div>
 
 <h2>Part 3: Still stuck at minute 45?</h2>
-<p>That's fine. Email Matt (mfm2@unh.edu) today with these four lines, so he can fix it with you before Monday:</p>
+<p>That's fine. Email your instructor (mfm2@unh.edu) today with these four lines, so they can fix it with you before Monday:</p>
 <pre>Route: agate / laptop
 OS: Mac / Windows (version if you know it)
 Last step that worked: (for example A6 or B4)
 Failing command and its exact output: (copy and paste the text)</pre>
 <p><b>Before you send it, delete any key or password from what you pasted.</b> Text beats a screenshot.</p>
-<p>In-person help: the CS tutoring center (second floor, about 2–6 PM, Mon–Fri) or Matt's office hours (Mon and Wed 9–11).</p>
+<p>In-person help: the CS tutoring center (second floor, about 2–6 PM, Mon–Fri) or your instructor's office hours (Mon and Wed 9–11).</p>
 
 <h2>Appendix: Fixes</h2>
 <p>Find the fix number your step sent you to. Run the check, then the fix, then <b>redo the step you came from</b>.</p>
@@ -249,28 +249,28 @@ Failing command and its exact output: (copy and paste the text)</pre>
 <tr><td colspan="3"><b>agate login</b></td></tr>
 <tr id="f1"><td>F1</td><td><code>Permission denied</code>, or it shows your laptop's name</td><td>Your command needs <code>your-unh-username@</code>. Retype it as <code>ssh your-unh-username@agate.cs.unh.edu</code>. A missing <code>@</code> is the usual typo.</td></tr>
 <tr id="f2"><td>F2</td><td>The password "doesn't type", or it's refused</td><td>Nothing showing is normal: type it blind and press Enter. Refused three times: switch to Route B and reset your password after class.</td></tr>
-<tr id="f3"><td>F3</td><td>You're not in the list, or have no account</td><td>Switch to Route B now. Tell Matt your username after class.</td></tr>
+<tr id="f3"><td>F3</td><td>You're not in the list, or have no account</td><td>Switch to Route B now. Tell your instructor your username after class.</td></tr>
 <tr id="f4"><td>F4</td><td>It hangs, then <code>Connection timed out</code></td><td>Join campus Wi-Fi (or the UNH VPN off campus) and try again. Still stuck: Route B.</td></tr>
 <tr><td colspan="3"><b>Install and PATH</b></td></tr>
 <tr id="f5"><td>F5</td><td><code>opencode: command not found</code> after A4</td><td>Type <code>source ~/.bashrc</code>, then <code>opencode --version</code>. Still not found: type the four A4 lines again, one at a time.</td></tr>
 <tr id="f6"><td>F6</td><td><code>EACCES</code> or <code>permission denied</code> during <code>npm install</code></td><td>Don't use <code>sudo</code>. On agate, redo A4 from its first line. On a Mac, type these one at a time:<br><code>npm config set prefix ~/.npm-global</code><br><code>echo 'export PATH="$HOME/.npm-global/bin:$PATH"' &gt;&gt; ~/.zshrc</code><br>Then close Terminal, open a new one, and redo B2.</td></tr>
 <tr id="f7"><td>F7</td><td><code>node</code> not found, or <code>'opencode'</code> / <code>'npm'</code> "is not recognized" (Windows)</td><td>Node not installed: install the LTS version from nodejs.org, keeping "Add to PATH" ticked. Then <b>close and reopen</b> the terminal (a new window is needed after any install) and redo the step.</td></tr>
 <tr id="f8"><td>F8</td><td>"running scripts is disabled on this system" (Windows)</td><td>Type <code>npm.cmd</code> instead of <code>npm</code>, and <code>opencode.cmd</code> instead of <code>opencode</code>, for the rest of today.</td></tr>
-<tr id="f9"><td>F9</td><td>The version starts with <code>0.</code> or <code>2.</code></td><td>Don't change it. Tell Matt the number, and do Part 2 on a neighbour's screen.</td></tr>
+<tr id="f9"><td>F9</td><td>The version starts with <code>0.</code> or <code>2.</code></td><td>Don't change it. Tell your instructor the number, and do Part 2 on a neighbour's screen.</td></tr>
 <tr><td colspan="3"><b>Python and the helper</b></td></tr>
 <tr id="f10"><td>F10</td><td><code>python3</code> not found, or the Microsoft Store opens (Windows)</td><td>On Windows, use <code>py -3</code> everywhere. If that isn't found either, install Python from python.org and reopen PowerShell.</td></tr>
 <tr id="f11"><td>F11</td><td>Mac asks to install "command line developer tools"</td><td>Click Install and wait. Then redo the step.</td></tr>
-<tr id="f12"><td>F12</td><td><code>Existing OpenCode configuration differs</code></td><td>Another settings file is already there. <b>Don't move or delete it yourself:</b> it may hold your own settings or a key. agate: if Step 0.3 said it's Monday's handout file, do the move in 0.3, then redo <code>prepare</code>. Anyone else: ask Matt.</td></tr>
-<tr id="f13"><td>F13</td><td><code>An alternate OpenCode configuration exists</code></td><td>Stop and don't change anything. Tell Matt, and do Part 2 on a neighbour's screen.</td></tr>
+<tr id="f12"><td>F12</td><td><code>Existing OpenCode configuration differs</code></td><td>Another settings file is already there. <b>Don't move or delete it yourself:</b> it may hold your own settings or a key. agate: if Step 0.3 said it's Monday's handout file, do the move in 0.3, then redo <code>prepare</code>. Anyone else: ask your instructor.</td></tr>
+<tr id="f13"><td>F13</td><td><code>An alternate OpenCode configuration exists</code></td><td>Stop and don't change anything. Tell your instructor, and do Part 2 on a neighbour's screen.</td></tr>
 <tr id="f14"><td>F14</td><td><code>Key must be nonempty</code></td><td>The paste didn't work. Copy the key again, run <code>key</code> again, and paste with right-click. Windows: if it now says the key folder already exists, see F21.</td></tr>
 <tr id="f15"><td>F15</td><td><code>Piped input is refused</code></td><td>You're inside an AI tool or Cursor. Run <code>key</code> in a normal Terminal or PowerShell window you opened yourself.</td></tr>
 <tr id="f16"><td>F16</td><td><code>setup-key.py</code> isn't in Downloads, or the browser renamed it</td><td>Check the browser's downloads list. If it's called <code>setup-key (1).py</code>, use that exact name in quotes. If it opened as text instead of saving, right-click the page and choose "Save as".</td></tr>
 <tr><td colspan="3"><b>Key and Deep Thought</b></td></tr>
 <tr id="f17"><td>F17</td><td><code>Configuration is invalid … bad file reference … api-key does not exist</code></td><td>Your key isn't saved yet. Do the key step (A7 or B5).</td></tr>
-<tr id="f18"><td>F18</td><td>An error mentioning <code>401</code>, <code>403</code> or "unauthorized"</td><td>The key is wrong, or not allowed yet. Make a new key with Matt. agate and Mac: redo the key step. <b>Windows: redoing the key step is refused once the key folder exists, so ask Matt</b> (F21). Never show anyone the key.</td></tr>
+<tr id="f18"><td>F18</td><td>An error mentioning <code>401</code>, <code>403</code> or "unauthorized"</td><td>The key is wrong, or not allowed yet. Make a new key with your instructor. agate and Mac: redo the key step. <b>Windows: redoing the key step is refused once the key folder exists, so ask your instructor</b> (F21). Never show anyone the key.</td></tr>
 <tr id="f19"><td>F19</td><td>OpenCode spins with no reply for over a minute</td><td>Deep Thought may only answer on the UNH network: join campus Wi-Fi or the VPN, and try again. Still spinning? Raise your hand. Note the time and send it with Part 3; the cause may be the network or Deep Thought.</td></tr>
 <tr id="f20"><td>F20</td><td>A chat reply, but no <code>hello.py</code></td><td>In OpenCode, type <code>/models</code> and choose <b>DeepThought Claude Sonnet 4.6</b>. Ask again, and allow it to create and run the file.</td></tr>
-<tr id="f21"><td>F21</td><td><code>Windows key folder already exists</code> (after a failed first paste, or when replacing a key)</td><td><b>Don't delete anything.</b> Raise your hand: Matt helps you set the folder aside, then you redo B5. Meanwhile do Part 2 on a neighbour's screen.</td></tr>
+<tr id="f21"><td>F21</td><td><code>Windows key folder already exists</code> (after a failed first paste, or when replacing a key)</td><td><b>Don't delete anything.</b> Raise your hand: your instructor helps you set the folder aside, then you redo B5. Meanwhile do Part 2 on a neighbour's screen.</td></tr>
 <tr id="f22"><td>F22</td><td>"model not found" or "unsupported"</td><td>Don't switch to another provider. Write down the OpenCode version and the error, and send them with Part 3.</td></tr>
 </table>
 </body></html>

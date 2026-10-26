@@ -63,15 +63,23 @@ key. Run `python3 setup-key.py prepare` (Windows: `py -3 setup-key.py prepare`).
 Quote the full script path if using a different working directory.
 
 The helper creates `~/.config/opencode/opencode.json`, allowing only the
-DeepThought provider, with Sonnet 4.6 as default and sharing disabled. It uses
+DeepThought provider, with Sonnet 4.6 as the initial fallback and sharing disabled. It uses
 `https://dtcontroller.sr.unh.edu:4242/openai/v1` and this key reference:
 `{file:~/.config/cs450-deepthought/api-key}`. No shell-profile key export or
 shell reload is required. The config contains no secret.
 
-The helper refuses a differing existing config, JSONC, custom config variables,
-or symlinked setup paths. Keep existing settings untouched and report the
-conflict; do not print their contents or overwrite them. Do not remove an
-existing key or edit old shell-profile secrets as part of this setup.
+The helper replaces differing existing config files after making timestamped,
+unique backups beside each original. It reports each backup path, never the
+contents. Backups are private because an old config may contain a credential.
+This deliberately resets old settings to the course config rather than merging
+possibly conflicting providers, defaults, or permissions. It handles existing
+JSONC files and honors `XDG_CONFIG_HOME`, `OPENCODE_CONFIG_DIR`, and
+`OPENCODE_CONFIG` in the current environment. Run all steps in that same terminal
+environment. Symlinked paths are still refused. If `OPENCODE_CONFIG_CONTENT` is
+set, the helper asks the student to unset it in that terminal and rerun: inline
+settings override files, and a child process cannot unset its parent's variable.
+Do not display any existing config, backup, or credential. Do not edit old
+shell-profile secrets or uninstall working OpenCode binaries.
 
 ## 4. Hand key entry to the student
 
@@ -89,10 +97,44 @@ said 'Key saved privately.' Do not send the key or a screenshot."
 
 The helper refuses redirected input and getpass's echoing fallback. It saves
 the key outside the project in `~/.config/cs450-deepthought/api-key`. On POSIX
-the directory is mode 700 and the key is mode 600. On native Windows the new
-directory receives an ACL for the current user's SID before key creation; an
-existing key directory is refused, so recovery/rotation needs instructor help.
-The helper makes no network requests and prints no key value.
+the directory is mode 700 and the key is mode 600. On native Windows the
+new or existing directory receives a repaired ACL for the current user's SID
+before key creation. An existing key is replaced atomically; it is not backed
+up. The helper prints `Key saved privately. Its value was not printed.`
+
+After saving, the helper reads the saved key internally and sends it only as a
+Bearer authorization header to the fixed DeepThought endpoint's `GET /models`.
+Redirects are refused. Every returned model ID is put in the DeepThought model
+list. The default is the highest numeric Claude Sonnet version (date suffixes
+break version ties), or the first model ID alphabetically if no Sonnet exists.
+The output is `DeepThought models discovered: N`, `Default model:
+deepthought/<model-id>`, and a line explaining the choice. IDs are used as display
+names; a listing does not establish that every model supports tool execution.
+The standard listing lacks token limits. The helper retains the course Claude
+budget of 200,000 context / 8,192 output tokens and uses a provisional 32,768 /
+4,096 budget for other IDs, rather than OpenCode's zero limits for unknown IDs.
+These budgets are not verified capacities; non-Claude models may need adjustment.
+If discovery fails immediately after saving a key, output is `Model discovery unavailable. Using fallback:
+DeepThought Claude Sonnet 4.6.` This is not proof that the key is valid.
+No response body, exception detail, or key value is printed.
+
+On macOS with Python from python.org, discovery can fall back if Python's
+certificate installation step was skipped. The fallback does not undo key
+storage or prevent trying OpenCode; it does not prove connectivity. Have the
+student run `Install Certificates.command` in their installed
+`/Applications/Python 3.x/` folder, as described in the
+[Python macOS installation instructions](https://docs.python.org/3/using/mac.html#installation-steps),
+then try `refresh-models`. Do not disable TLS verification.
+
+To update later without reentering the key, have the student run
+`python3 "/absolute/path/setup-key.py" refresh-models` (Windows:
+`py -3 "C:\absolute\path\setup-key.py" refresh-models`) in their own normal terminal.
+Do not run this action through an agent tool: it reads and uses the saved key.
+It backs up changed configuration files just as `prepare` does. If this later
+refresh fails, it preserves the existing config and prints `Model discovery
+unavailable. Existing configuration left unchanged.` Running
+`prepare` again resets to the static fallback; follow it with `refresh-models`
+if a key is already saved.
 
 If entry fails, ask only for the helper's fixed error message. Do not ask for
 the key or the contents of any config/secret file. If a key was pasted into
@@ -108,7 +150,9 @@ it does not read the key or prove authentication.
 Have the student create a NEW empty local folder, open a normal terminal
 there, and run `opencode`. Keep it outside any existing repository so project
 config cannot override the course settings. In `/models`, verify DeepThought
-and `ets:aws:us.anthropic.claude-sonnet-4-6`. Ask OpenCode:
+and the model ID printed by the helper's `Default model:` line (or Claude Sonnet
+4.6 if it reported fallback). Do not require the fixed Sonnet 4.6 label after
+successful discovery. Ask OpenCode:
 "Create hello.py that prints Hello CS 450, run it, and show the output."
 Use `python` or `python3` as appropriate to the installed interpreter.
 Success means the file exists AND ran with that output through DeepThought.
@@ -122,7 +166,7 @@ switch providers or invent a replacement model. The old KB's recommendation
 to run `opencode debug config` is intentionally excluded because it may reveal
 the resolved key.
 
-Report: OS/environment, OpenCode version, config prepared or conflict, key
+Report: OS/environment, OpenCode version, config prepared or fixed error category, key
 presence only, and student-confirmed smoke-test result (or "not yet tested").
 Never claim an authenticated test succeeded without the student's receipt.
 

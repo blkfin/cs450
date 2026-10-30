@@ -1,0 +1,192 @@
+# CS 450: Put a student's page on agate
+
+> Directions for an AI agent helping a CS 450 student. The student has an idea
+> for a small, fun web page. Your job: build it as ONE html file, put it in the
+> student's public web folder on agate, make sure the web server can read it,
+> and check that it loads. agate is UNH's shared Linux computer
+> (`agate.cs.unh.edu`). Pages in a student's `~/public_html` folder are served
+> at `https://cs.unh.edu/~username/...`.
+
+The student will give you this whole file plus their idea and one check
+("done when ..."). Read all of it before you do anything.
+
+Pick your mode:
+
+- **Mode A: you can run commands on agate yourself** (Cursor's `agent` or
+  OpenCode running on agate). Follow "Mode A".
+- **Mode B: you can't run commands on agate** (a chat in a web browser, or an
+  agent on the student's own laptop). You write the page and tell the student
+  exactly what to type; they run it on agate and paste back what it printed.
+  Follow "Mode B".
+
+## Boundaries (both modes)
+
+- Touch only the folder `~/public_html/cs450/` and one file in it:
+  `~/public_html/cs450/fun.html`. Always use exactly that name, even if the
+  student asks for another; every command and address below depends on it.
+- If `fun.html` already exists and the student hasn't said to replace it,
+  ask before overwriting it. If they want to keep the old page, stop and ask
+  them to rename it themselves first (for example to `fun-old.html`).
+- Do not read, list, open, or change any other file in the student's home
+  folder. In particular, never open `~/.bashrc` or anything in `~/.config`:
+  the student's course key is stored there.
+- No `sudo`, no installing software, no `chmod 777`, no `chmod -R`, and no
+  permission change on anything except the folders and file named in this
+  document.
+- Never ask for the student's password or key. If a step needs a password,
+  the student types it themselves.
+
+## Rules for the page itself
+
+The page is public: anyone on the internet can open it.
+
+- One self-contained HTML file: HTML, CSS and JavaScript all inside it. Don't
+  link to anything outside the file (no CDNs, fonts, images or scripts from
+  other sites). Draw with CSS, emoji, SVG or canvas instead.
+- Never ask visitors for their name, email, or other personal details. Don't
+  send or save anything a visitor types.
+- No personal information about the student (full name, photo, student ID,
+  schedule) and nothing about other real people.
+- Nothing someone could get hurt following, like medication doses or
+  financial advice.
+- Keep it small: under about 300 lines. Keep every line under 200
+  characters. No minified code. In Mode B the student pastes the file into
+  a terminal, and very long lines can get cut off.
+- It should work on a phone screen as well as a laptop.
+
+## Mode A: you run the commands on agate
+
+1. **Check where you are.** Run `whoami` and `hostname`. If the hostname
+   doesn't mention agate, you are not on agate: stop and switch to Mode B.
+   Remember the `whoami` output; it is the username in the page address.
+2. **Make the folder.** `mkdir -p ~/public_html/cs450`
+3. **Build the page** at `~/public_html/cs450/fun.html` (see the Boundaries
+   about overwriting). Follow the student's idea and the page rules above.
+4. **Let the web server read it.** The web server is not the student, so it
+   counts as "others". It needs execute (`x`) on every folder on the way to
+   the page and read (`r`) on the page itself. Look first:
+
+       ls -ld ~ ~/public_html ~/public_html/cs450
+       ls -l ~/public_html/cs450/fun.html
+
+   In each line, the last three letters of the first column are the "others"
+   permissions. Each folder needs an `x` there. The file needs an `r`. If
+   one is missing, tell the student the change you are about to make, then
+   make only that change:
+
+       chmod o+x ~ ~/public_html ~/public_html/cs450
+       chmod o+r ~/public_html/cs450/fun.html
+
+   `o+x` on a folder lets the web server pass through it; it does not let
+   anyone list what's inside. Never add `o+r` or `o+w` to the home folder.
+5. **Check it loads.** Run:
+
+       curl -s -o /dev/null -w "%{http_code}\n" https://cs.unh.edu/~$(whoami)/cs450/fun.html
+
+   - `200`: it loads. Go to step 6.
+   - `403`: a permission is still missing. Repeat step 4.
+   - `404`: the file isn't where the address points. Check the folder and
+     file name, character for character.
+   - `000` or a connection error: agate couldn't reach the web server. Don't
+     guess. Ask the student to open the address in their browser and tell
+     you what they see.
+6. **Hand it to the student.** Give them the full address
+   `https://cs.unh.edu/~username/cs450/fun.html`, with `username` replaced
+   by their real username (the `whoami` output). Ask them to open it in their browser and try their own check. A
+   `200` means the server sent the page. It does not mean the page does what
+   they wanted; only their check shows that.
+7. **After every change** to the page, run step 5 again. Changing the file
+   usually keeps its permissions, but check anyway.
+
+## Mode B: you write it, the student types it
+
+You can't touch agate. The student is your hands: you tell them what to type,
+they run it and paste back what agate printed, and you decide the next step.
+Give **one step at a time** and wait for their reply. Don't dump all the steps
+at once.
+
+1. **Write the whole page** in one HTML code block, following the page rules
+   above (short lines matter here). Tell the student to look it over. If you
+   can show a preview, offer it.
+2. **Log in to agate.** The student opens Terminal (Mac) or PowerShell
+   (Windows) and types, with their own UNH username:
+
+       ssh your-unh-username@agate.cs.unh.edu
+
+   They type their UNH password; nothing shows while they type. They're in
+   when the prompt looks like `your-unh-username@agate:~$`.
+3. **Make the folder and start the file.** Two lines, one at a time:
+
+       mkdir -p ~/public_html/cs450
+       cat > ~/public_html/cs450/fun.html
+
+   After the second line, the cursor sits on an empty line and nothing seems
+   to happen. That is expected: agate is waiting for the file's contents.
+   Tell the student:
+   - Copy the whole HTML code block (use the copy button if there is one).
+   - Paste it into the terminal: Ctrl+V or right-click on Windows, Cmd+V on
+     a Mac. If Windows asks about pasting several lines, choose to paste
+     anyway.
+   - Press Enter, then hold Ctrl (also Ctrl on a Mac, not Cmd) and press D.
+     The normal prompt comes back.
+
+   `cat >` replaces the whole file, so to change the page later, repeat this
+   step with the whole new version.
+4. **Let the web server read it.** Two lines. Explain to the student that
+   `o+x` lets the web server pass through those folders without listing
+   them, and `o+r` lets it read this one file:
+
+       chmod o+x ~ ~/public_html ~/public_html/cs450
+       chmod o+r ~/public_html/cs450/fun.html
+
+   These print nothing when they work.
+5. **Check it loads.** One line. Ask the student to paste back the number it
+   prints:
+
+       curl -s -o /dev/null -w "%{http_code}\n" https://cs.unh.edu/~$(whoami)/cs450/fun.html
+
+   Read it as in Mode A step 5: `200` loads, `403` permissions (redo step 4),
+   `404` wrong place or name (have them run `ls -l ~/public_html/cs450` and
+   paste the output), anything else: have them open the address in a browser
+   and describe what they see.
+6. **Hand it over.** Have them run `whoami` if they need their username.
+   Their page is `https://cs.unh.edu/~username/cs450/fun.html`. Ask them to
+   open it and try their own check. If the page looks broken (half the page
+   missing, or code showing on screen), the paste was probably cut short. Have
+   them redo step 3 with the whole file.
+7. **Changes:** give the complete new file in one block, then repeat steps 3
+   and 5. Step 4 doesn't need repeating; replacing the contents keeps the
+   permissions.
+
+## If something goes wrong
+
+| What the student sees | What to do |
+|---|---|
+| `Permission denied` when logging in | They retype the username and password. Still failing: Mode B can't publish today. Have them save the HTML on their laptop, double-click it to open it in a browser, and submit the file with a note saying the login failed. |
+| Browser shows **403 Forbidden** | Step 4 again, then step 5. |
+| Browser shows **404 Not Found** | Check the address: their username after the `~`, then `/cs450/fun.html`. Usernames are case-sensitive. |
+| Page shows but looks broken, or shows code | In Mode B, the paste was cut short or mangled. Redo step 3 with the whole file. In Mode A, read the file back and fix it. |
+| Page works on a laptop but not a phone | Ask what happens on the phone, then fix the layout. |
+
+## When you're done, report
+
+- The page address.
+- The `curl` number from step 5 (or "not checked" and why).
+- Any permission change you made, or "none needed".
+- One sentence on what the page does, so the student can compare it with
+  their check.
+
+## Sources
+
+- Page address `https://cs.unh.edu/~username/...`: confirmed by the CS 450
+  instructor, October 29. The `~/public_html/cs450/` folder: CS 450's
+  "Build a public web page with a real AI agent" handout (September 30) and
+  the Week 5 build-a-page activity.
+- agate login (`ssh your-unh-username@agate.cs.unh.edu`): CS 450's "Get
+  OpenCode working" handout (October 21),
+  https://blkfin.github.io/cs450/handouts/l14-get-opencode-working.html
+- Page rules: the CS 450 build-a-page and study-guide activities.
+- Permissions: standard Unix rules for a web server reading files in a home
+  folder (`x` on each folder on the path, `r` on the file).
+- llms.txt convention: https://llmstxt.org/ (here, the student hands this
+  file to the agent directly).

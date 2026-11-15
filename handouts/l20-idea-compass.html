@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CS 450: Idea Compass: Map the territory</title>
+<style>
+@page { size: Letter; margin: 0.6in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { color: #152c38; font: 10.5pt/1.3 Arial, Helvetica, sans-serif; }
+.course { font-size: 9pt; color: #435c67; letter-spacing: .3px; margin: 0 0 2px; }
+h1 { font-size: 21pt; margin: 0 0 3px; letter-spacing: -.3px; }
+.gq { font-size: 11pt; font-style: italic; margin: 0 0 9px; color: #24505a; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin: 0 0 6px; }
+.field { display: flex; align-items: flex-end; gap: 6px; font-weight: bold; }
+.field .fill { flex: 1; border-bottom: 1px solid #6f8790; height: 18px; }
+.field.wide { grid-column: 1 / -1; }
+.lead { margin: 4px 0 10px; }
+.compass { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+.q { break-inside: avoid; page-break-inside: avoid; }
+.q h2 { font-size: 9.6pt; margin: 0 0 2px; letter-spacing: 0; white-space: nowrap; color: #1d4e57; }
+.q p { margin: 0 0 4px; font-size: 10pt; }
+.compass .q p { min-height: 2.6em; }
+.write { border: 1.2px solid #7e969f; border-radius: 3px; }
+.missing { margin-top: 12px; border-top: 2px solid #357b78; padding-top: 7px; }
+.missing h2 { font-size: 11.5pt; }
+.missing .q + .q { margin-top: 6px; }
+.source { margin-top: 8px; font-size: 8.5pt; font-style: italic; color: #435c67; }
+</style>
+</head>
+<body>
+<p class="course">CS 450 · AI and the World · Module 1: Curiosity</p>
+<h1>Idea Compass: Map the territory</h1>
+<p class="gq">How do you use AI to explore a topic instead of just getting an answer?</p>
+
+<div class="fields">
+  <div class="field">Name:<span class="fill"></span></div>
+  <div class="field">Group:<span class="fill"></span></div>
+  <div class="field wide">Topic / project:<span class="fill"></span></div>
+</div>
+
+<p class="lead">Fill in your assigned direction during the expedition. Fill in the rest as your group pools its outputs. Judge each answer: is it accurate? Is it deep enough?</p>
+
+<div class="compass">
+  <div class="q">
+    <h2>NORTH: FIRST PRINCIPLES (THE CORE IDEA)</h2>
+    <p>Prompt the AI for the fundamental concepts. Is the answer accurate? Is it deep enough?</p>
+    <div class="write" style="height:1.8in"></div>
+  </div>
+  <div class="q">
+    <h2>EAST: RELATED CONCEPTS (THE CONNECTIONS)</h2>
+    <p>Prompt the AI to connect this to different fields. What are the parallels?</p>
+    <div class="write" style="height:1.8in"></div>
+  </div>
+  <div class="q">
+    <h2>SOUTH: APPLICATION (THE REAL WORLD)</h2>
+    <p>Prompt the AI for three scenarios. How does your topic apply in real life situations?</p>
+    <div class="write" style="height:1.8in"></div>
+  </div>
+  <div class="q">
+    <h2>WEST: HISTORY &amp; ORIGIN (THE CONTEXT)</h2>
+    <p>Prompt the AI for the origin story. How did this idea evolve?</p>
+    <div class="write" style="height:1.8in"></div>
+  </div>
+</div>
+
+<div class="missing">
+  <div class="q">
+    <h2>WHAT IS MISSING?</h2>
+    <p>Look at your four answers above. What is still missing? What did the AI get wrong or oversimplify?</p>
+    <div class="write" style="height:1.05in"></div>
+  </div>
+  <div class="q">
+    <p><b>Write one new question you need to investigate yourself:</b></p>
+    <div class="write" style="height:0.6in"></div>
+  </div>
+</div>
+
+<p class="source">Source: Human Wisdom for the Age of AI — Elon University / AAC&amp;U / The Princeton Review. Module 1: Curiosity.</p>
+</body>
+</html>

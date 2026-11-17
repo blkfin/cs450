@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CS 450: The Evidence Protocol: Investigator's log</title>
+<style>
+@page { size: Letter; margin: 0.6in; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { color: #152c38; font: 10.5pt/1.3 Arial, Helvetica, sans-serif; }
+.course { font-size: 9pt; color: #435c67; letter-spacing: .3px; margin: 0 0 2px; }
+h1 { font-size: 20pt; margin: 0 0 3px; letter-spacing: -.3px; }
+.gq { font-size: 11pt; font-style: italic; margin: 0 0 8px; color: #24505a; }
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; margin: 0 0 6px; }
+.field { display: flex; align-items: flex-end; gap: 6px; font-weight: bold; }
+.field .fill { flex: 1; border-bottom: 1px solid #6f8790; height: 18px; }
+.field.wide { grid-column: 1 / -1; }
+.claim { font-weight: bold; margin: 2px 0 2px; }
+.lead { margin: 6px 0 8px; }
+.steps { display: grid; grid-template-columns: 1fr 1fr; gap: 9px 16px; }
+.q { break-inside: avoid; page-break-inside: avoid; }
+.q h2 { font-size: 9.6pt; margin: 0 0 2px; letter-spacing: 0; color: #1d4e57; }
+.q p { margin: 0 0 4px; font-size: 10pt; }
+.steps .q p { min-height: 2.6em; }
+.line { display: flex; align-items: flex-end; gap: 6px; margin: 0 0 4px; font-size: 10pt; }
+.line .fill { flex: 1; border-bottom: 1px solid #6f8790; height: 16px; }
+.box { display: inline-block; width: 11px; height: 11px; border: 1.2px solid #435c67; vertical-align: -1px; margin: 0 4px 0 0; }
+.choices { margin: 0 0 4px; font-size: 10pt; }
+.choices span + span { margin-left: 22px; }
+.write { border: 1.2px solid #7e969f; border-radius: 3px; }
+.verdict { border: 2px solid #357b78; border-radius: 4px; padding: 5px 7px 7px; }
+.steps .verdict p { min-height: 0; }
+.verdict .choices span { display: block; margin: 0 0 2px; }
+.verdict .choices span + span { margin-left: 0; }
+.source { margin-top: 7px; font-size: 8.5pt; font-style: italic; color: #435c67; }
+</style>
+</head>
+<body>
+<p class="course">CS 450 · AI and the World · Module 2: Critical Thinking</p>
+<h1>The Evidence Protocol: Investigator's log</h1>
+<p class="gq">How do you know an AI answer is safe to build on?</p>
+
+<div class="fields">
+  <div class="field">Name:<span class="fill"></span></div>
+  <div class="field">Group:<span class="fill"></span></div>
+  <div class="field wide">Topic / project:<span class="fill"></span></div>
+</div>
+<div class="q">
+  <p class="claim">The one AI claim we are validating:</p>
+  <div class="write" style="height:0.5in"></div>
+</div>
+
+<p class="lead">Fill in your assigned step during the investigation. Fill in the rest as your group pools its evidence. Log what you found, not what you expected.</p>
+
+<div class="steps">
+  <div class="q">
+    <h2>1. DETERMINE THE SOURCE (CHAIN OF CUSTODY)</h2>
+    <p>Click the links provided or search for the source text. Does the source actually exist? Does it support the claim?</p>
+    <div class="write" style="height:1.25in"></div>
+  </div>
+  <div class="q">
+    <h2>2. CHECK THE DATES (TIMELINESS)</h2>
+    <p>When was this evidence created? Is it outdated for what your project needs?</p>
+    <div class="write" style="height:1.25in"></div>
+  </div>
+  <div class="q">
+    <h2>3. CROSS-REFERENCE (CORROBORATION)</h2>
+    <p>Find one external, reputable, non-AI source that agrees or disagrees.</p>
+    <div class="line">Source found:<span class="fill"></span></div>
+    <div class="write" style="height:0.85in"></div>
+    <p class="choices" style="margin-top:4px">Verdict: <span><i class="box"></i>Matches</span><span><i class="box"></i>Contradicts</span></p>
+  </div>
+  <div class="q">
+    <h2>4. SCAN FOR TAMPERING (OMISSIONS / BIAS)</h2>
+    <p>What is missing? Whose perspective is left out? Is the language biased?</p>
+    <div class="write" style="height:1.25in"></div>
+  </div>
+  <div class="q">
+    <h2>5. RECOMPUTE THE DETAILS (PRECISION)</h2>
+    <p>Pick one number, quote or specific fact. Verify it exactly.</p>
+    <div class="write" style="height:1.75in"></div>
+  </div>
+  <div class="q verdict">
+    <h2>FINAL VERDICT</h2>
+    <p class="vq">Based on the evidence, is this AI output admissible?</p>
+    <p class="choices"><span><i class="box"></i>Admissible (Verified)</span><span><i class="box"></i>Inadmissible (Flawed / False)</span></p>
+    <p><b>What specific correction must be made?</b></p>
+    <div class="write" style="height:1.2in"></div>
+  </div>
+</div>
+
+<p class="source">Source: Human Wisdom for the Age of AI — Elon University / AAC&amp;U / The Princeton Review. Module 2: Critical Thinking (The Human Validator), Evidence Protocol worksheet, adapted to the CS450 group project.</p>
+</body>
+</html>
